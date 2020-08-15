@@ -1,7 +1,7 @@
 from typing import List
 
 class GameData:
-    """Class for holding information about a Steam game
+    """Class for storing information about a Steam game
 
     Attributes:
         id              The game's Steam id
