@@ -7,7 +7,7 @@ class GameData:
         id              The game's Steam id
         name            The game's name
         tags            The game's steam tags, i.e. Online Co-op
-        num_players     The game's estimated number of players
+        num_players     The numbers of players supported by the game
     """
     id: int
     name: str
