@@ -4,7 +4,7 @@ class GameData:
     """Class for storing information about a Steam game
 
     Attributes:
-        steam_iid              The game's Steam id
+        steam_iid       The game's Steam id
         name            The game's name
         tags            The game's steam tags, i.e. Online Co-op
         num_players     The numbers of players supported by the game
