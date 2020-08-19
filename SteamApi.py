@@ -22,6 +22,7 @@ def GetFriendsIds(user_id: str) -> List[str]:
 
 def GetOwnedGamesIds(user_id: str) -> List[str]:
     url = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={0}&steamid={1}&format=json".format(key, user_id)
+
     response = requests.get(url)
     response.raise_for_status()
 
@@ -36,6 +37,7 @@ def GetOwnedGamesIds(user_id: str) -> List[str]:
 def GetUserInfoFromIds(user_ids: List[str]) -> List[Dict[str, str]]:
     comma_separated_user_ids = ",".join(user_ids)
     url = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={0}&steamids={1}".format(key, comma_separated_user_ids)
+    
     response = requests.get(url)
     response.raise_for_status()
 
