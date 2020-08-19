@@ -43,6 +43,6 @@ def GetUserInfoFromIds(user_ids: List[str]) -> List[Dict[str, str]]:
 
     return user_info
 
-#print(GetFriendsIds("76561198117539193"))
+friends = GetFriendsIds("76561198117539193")
 #print(GetFriendsIds("peepeepoopoo"))
-print(GetUserInfoFromIds(["76561198117539193",]))
+print(GetUserInfoFromIds(friends))

@@ -4,7 +4,7 @@ class User:
     """Class for storing information about a steam user
 
     Attributes:
-        steam_id              The user's steam id
+        steam_id        The user's steam id
         name            The user's username
         games           List of steam game ids owned by user
     """
@@ -21,7 +21,7 @@ class MainUser(User):
     """Class representing the primary user
 
     Attributes:
-        steam_id              The user's steam id
+        steam_id        The user's steam id
         name            The user's username
         games           List of steam game ids owned by user
         friends         List of steam profile ids that are friends with the user
