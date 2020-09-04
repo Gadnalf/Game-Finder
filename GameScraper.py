@@ -4,7 +4,7 @@ from GameData import GameData
 from word2number import w2n
 
 def GameDataScraper(steam_iid: str) -> GameData:
-    response = requests.get('https://store.steampowered.com/api/appdetails?appids=' + str(steam_iid))
+    response = requests.get('https://store.steampowered.com/api/appdetails?appids=' + steam_iid)
 
     json = response.json()
     values = json.values()
@@ -20,11 +20,11 @@ def GameDataScraper(steam_iid: str) -> GameData:
 
     name = data.get("name") #to get the name of the game
 
-    num_players=PlayerNumberScraper(list)
+    num_players = PlayerNumberScraper(list)
 
-    return GameData(name, tags, list, num_players)
+    return GameData(steam_iid, name, tags, num_players)
 
-def PlayerNumberScraper(list: list) -> GameData:
+def PlayerNumberScraper(list: list) -> GameDataScraper:
 
     player_indicator = ('player','players','friend','friends','player.','players.','friend.','friends.')
     #a list of all potential ways of describing player count that I could find
@@ -42,6 +42,13 @@ def PlayerNumberScraper(list: list) -> GameData:
         if list[i - 1].isdigit():
             i = int(i)
             num_players.append(int(list[i - 1]))
+        elif "-" in list[i - 1]:
+            split = list[i - 1].split("-")
+            try:
+                split = w2n.word_to_num(split[-1]) #should I return i instead of doing all the logic here?
+                num_players.append(split)
+            except ValueError:
+                pass
         elif not list[i - 1].isdigit():
             try:
                 i = w2n.word_to_num(list[i - 1]) #should I return i instead of doing all the logic here?
@@ -49,7 +56,7 @@ def PlayerNumberScraper(list: list) -> GameData:
             except ValueError:
                 pass
 
-    return GameData(num_players)
+    return num_players
 #print(name)
 #print(gameid)
 #print(list_categories)
