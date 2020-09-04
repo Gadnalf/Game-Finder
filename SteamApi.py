@@ -45,6 +45,14 @@ def GetUserInfoFromIds(user_ids: List[str]) -> List[Dict[str, str]]:
 
     return user_info
 
+# Doesn't work
+def SearchUsers(search_text: str):
+    url = "https://steamcommunity.com/search/SearchCommunityAjax?text=gadnalf&filter=users&sessionid=42bfd6477c411fcb1dd79f9c&steamid_user=false&page=1"
+
+    response = requests.get(url)
+    return response
+
 friends = GetFriendsIds("76561198117539193")
 #print(GetFriendsIds("peepeepoopoo"))
 print(GetUserInfoFromIds(friends))
+#print(SearchUsers("gadnalf"))
