@@ -1,7 +1,6 @@
 from typing import List, Dict
 from fake_useragent import UserAgent
 import requests
-import urllib.request
 import re
 
 key = "30042FF9A1CAF4AD66072C779330F394"
