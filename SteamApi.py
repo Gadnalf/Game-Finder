@@ -51,8 +51,6 @@ def SearchUsers(search_text: str):
     ua = UserAgent()
     session = requests.Session()
     session.get("https://steamcommunity.com/search/users/")
-    print(session.headers)
-    print(session.cookies)
     response = session.get(
         url="https://steamcommunity.com/search/SearchCommunityAjax?text={0}&filter=users&sessionid={1}&steamid_user=false&page=1".format(search_text, str(session.cookies.get('sessionid'))),
         headers={
@@ -65,12 +63,23 @@ def SearchUsers(search_text: str):
 
 def ParseUserSearch(search_response: Dict[str, str]):
     html = search_response["html"]
+    results = re.findall("<div class=\"avatarMedium\"><a href=\"https://steamcommunity.com/(.*?)/(.*?)\"><img src=\"(.*?)\">", html)
+    ids = [result[1] if (result[0] == "profiles") else ResolveVanityUrl(result[1]) for result in results]
+    pics = [result[2] for result in results]
+    persona_name = re.findall("<a class=\"searchPersonaName\" href=\".*?\">(.*?)</a>", html)
 
-    custom_ids = re.findall("<a href=\"https://steamcommunity.com/id/(.*?)\">", html)
-    ids = re.findall("<a href=\"https://steamcommunity.com/profiles/(.*?)\">", html)
-    return custom_ids + ids
+    return dict(zip(ids, zip(persona_name, pics)))
+
+def ResolveVanityUrl(vanity_url: str):
+    url = "http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={0}&vanityurl={1}".format(key, vanity_url)
+
+    response = requests.get(url)
+    response.raise_for_status()
+    if response.json()["response"]["success"] == 42:
+        return -1
+
+    return response.json()["response"]["steamid"]
 
 #friends = GetFriendsIds("76561198117539193")
-#print(GetFriendsIds("peepeepoopoo"))
 #print(GetUserInfoFromIds(friends))
 print(SearchUsers("gadnalf"))
