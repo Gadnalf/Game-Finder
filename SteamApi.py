@@ -61,16 +61,23 @@ def SearchUsers(search_text: str):
     )
     return ParseUserSearch(response.json())
 
-def ParseUserSearch(search_response: Dict[str, str]):
+def ParseUserSearch(search_response) -> List[Dict[str, str]]:
     html = search_response["html"]
     results = re.findall("<div class=\"avatarMedium\"><a href=\"https://steamcommunity.com/(.*?)/(.*?)\"><img src=\"(.*?)\">", html)
-    ids = [result[1] if (result[0] == "profiles") else ResolveVanityUrl(result[1]) for result in results]
+    user_ids = [result[1] if (result[0] == "profiles") else ResolveVanityUrl(result[1]) for result in results]
     pics = [result[2] for result in results]
     persona_name = re.findall("<a class=\"searchPersonaName\" href=\".*?\">(.*?)</a>", html)
 
-    return dict(zip(ids, zip(persona_name, pics)))
+    user_infos = []
+    for i in range(len(user_ids)):
+        user_info = {}
+        user_info["id"] = user_ids[i]
+        user_info["name"] = persona_name[i]
+        user_info["pic"] = pics[i]
+        user_infos.append(user_info)
+    return user_infos
 
-def ResolveVanityUrl(vanity_url: str):
+def ResolveVanityUrl(vanity_url: str) -> str:
     url = "http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={0}&vanityurl={1}".format(key, vanity_url)
 
     response = requests.get(url)
